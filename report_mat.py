@@ -47,6 +47,7 @@ class text:
 			print(self.line)	
 	
 	def give_txt(self):
+									#### this for loop is unable to read lines from file
 		for self.line in self.txt:
 			print("reading line -> ")
 			print(self.line)
