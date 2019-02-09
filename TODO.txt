@@ -1,0 +1,4 @@
+1. analyze text report
+2. pick critical, warning, notice and info
+3. pick type of above categories
+4. add and form matrix into sheet
