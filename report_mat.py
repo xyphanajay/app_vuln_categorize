@@ -9,21 +9,20 @@ class sheet:
 	name = ''
 	wb = ''
 	sheet1 = ''
-	style = xlwt.easyxf('font: bold 0') 
+	s_no = 1
+	style = xlwt.easyxf('font: bold 0, color black;') 
 	
 	def __init__(self):
 		print("Sheet class called!")
-	
-	def create_wb(self):
 		self.wb = Workbook()
+		self.sheet1 = self.wb.add_sheet('Sheet 1', cell_overwrite_ok=True)
 	
 	def add_sheet(self):
-		self.sheet1 = self.wb.add_sheet('Sheet 1')
-	
+		self.s_no += 1
+		self.sheet = self.wb.add_sheet('Sheet ' + str(self.s_no), cell_overwrite_ok=True)
 	
 	def add_into(self, r, c, data):
-		self.sheet1.write(r, c, data, self.style)
-
+		self.sheet1.write(r, c, data)
 
 	def save_sheet(self, name = 'example'):	
 		self.wb.save(name + '.xls')
@@ -40,43 +39,57 @@ class text:
 		print("text class")
 	
 	def open_text(self, name):
-		self.txt = open(name + '.txt')
+		try:
+			self.txt = open(name + '.txt')
+			return 1
+		except IOError:
+			print("File not found!")
+			return 0
 
 	def print_txt(self):
+		self.txt.seek(0)
 		for self.line in self.txt:
 			print(self.line)	
 	
 	def give_txt(self):
 									#### this for loop is unable to read lines from file
+		self.txt.seek(0)
 		for self.line in self.txt:
 			print("reading line -> ")
 			print(self.line)
 			self.lines.append(self.line)
 		print("giving text -> ")
-		print(self.lines)
+		#print(self.lines)
 		return self.lines
 			
 		
 def main():
 	report = text()
 	excel = sheet()
-	excel.create_wb()
-	excel.add_sheet()
+	#excel.create_wb()
+	#excel.add_sheet()
 	report_name = input('Enter report name: ')
-	report.open_text(report_name)
-	report.print_txt()
-	txt_data = report.give_txt()
+	if (report.open_text(report_name)):
+		pass
+	else:
+		exit()
+	report.print_txt()				# working
+	txt_data = report.give_txt()    # failing!
 	print("getting txt_data -> ")
-	print(txt_data)
+	#print(txt_data)
 	i = 0
 	j = 0
+	#excel.add_into(0, 0, "test data") -----> success
+	#excel.save_sheet(input('Excel file name: '))
+	#exit()
 	for txt in txt_data:
 		if i == 10:
 			j += 1
 			i = 0
 		print("adding -> " + txt)
 		excel.add_into(i, j, txt)
+		i += 1
 	excel.save_sheet(input('Excel file name: '))
-	
-main()	
+
+main()
 	
