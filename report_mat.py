@@ -1,4 +1,5 @@
 #Python Script to Convert Text Based Report into Excel Matrix Sheet
+import os
 
 import xlwt 
 from xlwt import Workbook 
@@ -43,8 +44,12 @@ class text:
 			self.txt = open(name + '.txt')
 			return 1
 		except IOError:
-			print("File not found!")
-			return 0
+			try:
+				self.txt = open(name)
+				return 1
+			except IOError:
+				print("File not found!")
+				return 0
 
 	def print_txt(self):
 		self.txt.seek(0)
@@ -58,10 +63,19 @@ class text:
 			print("reading line -> ")
 			print(self.line)
 			self.lines.append(self.line)
-		print("giving text -> ")
+		#print("giving text -> ")
 		#print(self.lines)
 		return self.lines
-			
+		
+class reports:
+	dirc = []
+	def __init__(self, dirc = ''):
+		self.dirc = os.listdir(dirc)
+		
+	def show_files(self):
+		for l in self.dirc:
+			print (l)
+
 		
 def main():
 	report = text()
@@ -75,13 +89,20 @@ def main():
 		exit()
 	report.print_txt()				# working
 	txt_data = report.give_txt()    # failing!
-	print("getting txt_data -> ")
+	#print("getting txt_data -> ")
 	#print(txt_data)
 	i = 0
 	j = 0
 	#excel.add_into(0, 0, "test data") -----> success
 	#excel.save_sheet(input('Excel file name: '))
-	#exit()
+	print("List file in report ->")
+	rep = reports("./report")
+	f = text()
+	for r in rep:
+		f.open_txt(r)
+	f.print_txt()
+	#rep.show_files()
+	exit()
 	for txt in txt_data:
 		if i == 10:
 			j += 1
