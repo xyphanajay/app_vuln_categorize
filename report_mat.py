@@ -60,8 +60,8 @@ class text:
 									#### this for loop is unable to read lines from file
 		self.txt.seek(0)
 		for self.line in self.txt:
-			print("reading line -> ")
-			print(self.line)
+			#print("reading line -> ")
+			#print(self.line)
 			self.lines.append(self.line)
 		#print("giving text -> ")
 		#print(self.lines)
@@ -78,39 +78,32 @@ class reports:
 
 		
 def main():
-	report = text()
 	excel = sheet()
-	#excel.create_wb()
-	#excel.add_sheet()
-	report_name = input('Enter report name: ')
-	if (report.open_text(report_name)):
-		pass
-	else:
-		exit()
-	report.print_txt()				# working
-	txt_data = report.give_txt()    # failing!
-	#print("getting txt_data -> ")
-	#print(txt_data)
 	i = 0
 	j = 0
-	#excel.add_into(0, 0, "test data") -----> success
-	#excel.save_sheet(input('Excel file name: '))
 	print("List file in report ->")
 	rep = reports("./report")
+	rep.show_files()
 	f = text()
-	for r in rep:
-		f.open_txt(r)
-	f.print_txt()
-	#rep.show_files()
-	exit()
-	for txt in txt_data:
-		if i == 10:
-			j += 1
-			i = 0
-		print("adding -> " + txt)
-		excel.add_into(i, j, txt)
-		i += 1
-	excel.save_sheet(input('Excel file name: '))
-
+	for r in rep.dirc:
+		#print(r)
+		if (f.open_text('./report/' + r)):
+			pass
+		else:
+			print("Filed to open!")
+			exit()
+		#f.print_txt()
+		txt_data = f.give_txt()
+	
+	#exit()
+		for txt in txt_data:
+			if i == 10:
+				j += 1
+				i = 0
+			#print("adding -> " + txt)
+			excel.add_into(i, j, txt)
+			i += 1
+		excel.save_sheet(r)
+		print("Sheet saved: " + r)
 main()
 	
