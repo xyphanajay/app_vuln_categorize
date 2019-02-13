@@ -1,5 +1,7 @@
 #Python Script to Convert Text Based Report into Excel Matrix Sheet
 import os
+import re
+import datetime
 
 import xlwt 
 from xlwt import Workbook 
@@ -57,7 +59,6 @@ class text:
 			print(self.line)	
 	
 	def give_txt(self):
-									#### this for loop is unable to read lines from file
 		self.txt.seek(0)
 		for self.line in self.txt:
 			#print("reading line -> ")
@@ -74,36 +75,97 @@ class reports:
 		
 	def show_files(self):
 		for l in self.dirc:
-			print (l)
-
+			print (rename(l))
+class picker:
+	ct = '[Critical]'
+	wn = '[Warning]'
+	ct_l = []
+	wn_l = []
+	def pick_lines(self, txt):
+		for line in txt:
+			if self.ct in line:
+				self.ct_l.append(line)
+			if self.wn in line:
+				self.wn_l.append(line)
+		return self.ct_l, self.wn_l
+			
+	def split_cat(self, data):
+		#re.split(r"<\>
+		# re.split("\[|\] | <|<|>|> |:", c) <-------- working best till now 
+		# check '<' before hand
+		# case 1: [Critical]  Accessing the Internet Checking: ---> ['', 'Critical', ' AndroidManifest ContentProvider Exported Checking', '']
+		# case 2: [Critical] <Implicit_Intent> Implicit Service Checking: ---> ['', 'Critical', '', 'Implicit_Intent', ' Implicit Service Checking', '']
+		# case 3: [Critical] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking: ---> ['', 'Critical', '', 'WebView', '', 'Remote Code Execution', '', '#CVE-2013-4710#', ' WebView RCE Vulnerability Checking', '']
+		# dealing: Tag1: Critical Tag2: None | (WebView) Descri: (Getting Android_id)
+		# lenth: 1 tag: 4; 2 tags: 6; 3 tags: 8(rare); 4 tags: 10
+		# picks: s[3] of all tags > 1; s[n - 2] for n tag
+		split = re.split("\[|\] | <|<|>|> |:", data)
+		if len(split) == 4:
+			return split[2], None
+		else:
+			return split[3], split[len(split) - 2]
+			
+def rename(name):
+	return re.split(r"_", name)[0]
 		
 def main():
-	excel = sheet()
-	i = 0
-	j = 0
+	excel = sheet()						# creating sheet
+	i = 0								# col
+	j = 0								# row
+	app_no = 0
+	vul_no = 0
+	temp = ''
+	ct_l = []							# critical lines
+	wn_l = []							# warning lines
+	critical = []
+	critical_all = []
+	warning = []
 	print("List file in report ->")
-	rep = reports("./report")
-	rep.show_files()
-	f = text()
+	rep = reports("./report")			# creating obj for report files
+	pick = picker()						# creating obj for line picker
+	f = text()							# creating text obj
+	#rep.show_files()					# showing list of report files
 	for r in rep.dirc:
-		#print(r)
+	
 		if (f.open_text('./report/' + r)):
+			print("Report accessing: " + rename(r))
+			app_no += 1
+			excel.add_into(0, app_no, rename(r))
 			pass
 		else:
 			print("Filed to open!")
 			exit()
-		#f.print_txt()
-		txt_data = f.give_txt()
-	
-	#exit()
-		for txt in txt_data:
-			if i == 10:
-				j += 1
-				i = 0
-			#print("adding -> " + txt)
-			excel.add_into(i, j, txt)
-			i += 1
-		excel.save_sheet(r)
-		print("Sheet saved: " + r)
+		critical = []							# clearing critical old report info
+		print("Critical empty: ")
+		#print(critical)
+		txt_data = f.give_txt()					# getting report text
+		ct_l, wn_l = pick.pick_lines(txt_data)	# getting critical and warning of each report
+		print(ct_l)
+		for data in ct_l:
+			tag, des = pick.split_cat(data)
+			if des is None:
+				temp = tag
+			else:
+				temp = tag + ":" + des
+			critical.append(temp)
+			# adding and checking vul in critical_main
+			if temp not in critical_all:
+				critical_all.append(temp)
+				vul_no = critical_all.index(temp) + 1
+				excel.add_into(vul_no, 0, temp)
+			excel.add_into((critical_all.index(temp) + 1), app_no, 1)
+		print(critical)
+				
+#		for vuln in critical_all:
+#			vul_no = critical_all.index(vuln) + 1
+#			if vuln in critical:
+#				excel.add_into(vul_no, app_no, 1)
+#			else:
+#				print("nooo")
+#				excel.add_into(vul_no, app_no, 0)
+	print("Total Critical cases: " + str(len(critical_all)))
+	for item in critical_all:
+		print(item)
+	excel.save_sheet("Final_report " + str(datetime.datetime.now()))
 main()
 	

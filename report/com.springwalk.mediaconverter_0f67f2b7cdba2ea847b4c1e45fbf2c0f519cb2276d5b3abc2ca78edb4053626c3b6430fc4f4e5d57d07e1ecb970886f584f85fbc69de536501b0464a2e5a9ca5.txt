@@ -1,0 +1,647 @@
+*************************************************************************
+**   AndroBugs Framework - Android App Security Vulnerability Scanner  **
+**                            version: 1.0.0                           **
+**     author: Yu-Cheng Lin (@AndroBugs, http://www.AndroBugs.com)     **
+**               contact: androbugs.framework@gmail.com                **
+*************************************************************************
+Platform: Android
+Package Name: com.springwalk.mediaconverter
+Package Version Name: 1.9.53
+Package Version Code: 53
+Min Sdk: 14
+Target Sdk: 26
+MD5   : 390c7edc464a11c9783491173e932927
+SHA1  : 1cba1fb450000e91390dcbae183ed3ce212b3716
+SHA256: eaf4f9017665a4de2ca15e3fe39ab59eaa11d18d87feed3506e8da48163ae467
+SHA512: c453f313eacf7e2e26833165a0c5b30c07e4c4608c6d756b6bf9d6cb141406c436a8a9bdc7858231f1f27e5e53a40cc9d88d14a71c34815f7028fa792a3eb903
+Analyze Signature: 0f67f2b7cdba2ea847b4c1e45fbf2c0f519cb2276d5b3abc2ca78edb4053626c3b6430fc4f4e5d57d07e1ecb970886f584f85fbc69de536501b0464a2e5a9ca5
+------------------------------------------------------------------------------------------------
+[Critical] <Command> Runtime Command Checking:
+           This app is using critical function 'Runtime.getRuntime().exec("...")'.
+           Please confirm these following code secions are not harmful:
+               => Lcom/startapp/android/b/a;->i()[Ljava/lang/String; (0x12) --->
+                    Ljava/lang/Runtime;->exec(Ljava/lang/String;)Ljava/lang/Process;
+               => Lcom/startapp/android/b/a;->j()[Ljava/lang/String; (0x12) --->
+                    Ljava/lang/Runtime;->exec(Ljava/lang/String;)Ljava/lang/Process;
+[Critical] <Implicit_Intent> Implicit Service Checking:
+           To ensure your app is secure, always use an explicit intent when starting a Service and DO NOT declare intent filters for your
+           services. Using an implicit intent to start a service is a security hazard because you cannot be certain what service will
+           respond to the intent, and the user cannot see which service starts.
+           Reference: http://developer.android.com/guide/components/intents-filters.html#Types
+               => com.google.firebase.iid.FirebaseInstanceIdService
+[Critical] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Custom Classes):
+           This app allows Self-defined HOSTNAME VERIFIER to accept all Common Names(CN).
+           This is a critical vulnerability and allows attackers to do MITM attacks with his valid certificate without your knowledge.
+           Case example:
+           (1)http://osvdb.org/96411
+           (2)http://www.wooyun.org/bugs/wooyun-2010-042710
+           (3)http://www.wooyun.org/bugs/wooyun-2010-052339
+           Also check Google doc: http://developer.android.com/training/articles/security-ssl.html (Caution: Replacing HostnameVerifier can
+           be very dangerous).
+           OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           Check this book to see how to solve this issue: http://goo.gl/BFb65r
+
+           To see what's the importance of Common Name(CN) verification.
+           Use Google Chrome to navigate:
+            - https://www.google.com   => SSL certificate is valid
+            - https://60.199.175.158/  => This is the IP address of google.com, but the CN is not match, making the certificate invalid. You
+           still can go Google.com but now you cannot distinguish attackers from normal users
+
+           Please check the code inside these methods:
+               Le/e/a$1;->verify(Ljava/lang/String; Ljavax/net/ssl/SSLSession;)Z
+               Le/e/a$3;->verify(Ljava/lang/String; Ljavax/net/ssl/SSLSession;)Z
+[Critical] <SSL_Security> SSL Connection Checking:
+           URLs that are NOT under SSL (Total:15):
+               http://%s:%d/%s
+                   => Lcom/e/a/f;->b(Ljava/lang/String;)Ljava/lang/String;
+                   => Lcom/e/a/k;->c()Ljava/lang/String;
+               http://ads-test.st.ogury.com/
+                   => Lio/presage/j;->a(Lio/presage/h; Lio/presage/BriedeMelun;)V
+               http://eula.ogury.com/
+                   => Lio/presage/ChinGentsai;-><init>(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;)V
+               http://eula.ogury.com/mraid.js
+                   => Lio/presage/ChangKoehan;->shouldInterceptRequest(Landroid/webkit/WebView;
+                    Ljava/lang/String;)Landroid/webkit/WebResourceResponse;
+               http://i.xx.openx.com/ef3/ef31c13c898edcdfc73feb3c0193b64bcfa70082/754/7544eb4e2c8cb99b125559b8846ce948_2.jpeg
+                   => Lcom/smaato/soma/test/DummyConnector;->createImageBanner()Lcom/smaato/soma/internal/ReceivedBanner;
+               http://itunes.apple.com
+                   => Lcom/truenet/android/b$a;->a(Ljava/lang/String;)Z
+               http://ogury.io
+                   => Lio/presage/mraid/browser/ShortcutActivity;->onCreate(Landroid/os/Bundle;)V
+               http://ogymraid
+                   => Lio/presage/SaintPaulin;->a(Landroid/webkit/WebView; Ljava/lang/String;)Landroid/webkit/WebResourceResponse;
+                   => Lio/presage/ChangKoehan;->shouldOverrideUrlLoading(Landroid/webkit/WebView; Ljava/lang/String;)Z
+                   => Lio/presage/ChangKoehan;->shouldInterceptRequest(Landroid/webkit/WebView;
+                    Ljava/lang/String;)Landroid/webkit/WebResourceResponse;
+                   => Lio/presage/Piastrellou;->a(Ljava/lang/String; Lio/presage/h; Lio/presage/CantalEntreDeux;)Z
+                   => Lio/presage/StVincentauChablis;->a(Ljava/lang/String; Lio/presage/h; Lio/presage/CantalEntreDeux;)Z
+               http://onesto.re/0000650126
+                   => Lcom/springwalk/mediaconverter/MainActivity$16;->onClick(Landroid/content/DialogInterface; I)V
+               http://play.google.com
+                   => Lcom/truenet/android/b$a;->a(Ljava/lang/String;)Z
+                   => Lcom/startapp/android/publish/adsCommon/c;->b(Ljava/lang/String;)Z
+               http://sdk-logs.matomy.com:12201/gelf
+                   => Lcom/mobfox/sdk/c/a;->a(Lorg/json/JSONObject; Lcom/mobfox/sdk/e/a;)V
+               http://twitter.com/home?status=
+                   => Lcom/inmobi/rendering/mraid/i;->a(Landroid/content/Context; I Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/String;)V
+               http://www.google.com
+                   => Lcom/google/android/gms/internal/ads/fj;-><init>(Landroid/content/Context;)V
+               http://www.smaato.com
+                   => Lcom/smaato/soma/test/DummyConnector;->createImageBanner()Lcom/smaato/soma/internal/ReceivedBanner;
+               http://xmlpull.org/v1/doc/features.html#process-namespaces
+                   => Lcom/smaato/soma/internal/utilities/VASTParser;->parseVAST(Ljava/io/InputStream;
+                    Lcom/smaato/soma/internal/vast/VASTAd;)Lcom/smaato/soma/internal/vast/VASTAd;
+                   => Lcom/millennialmedia/internal/f/d;->a(Ljava/lang/String;)Lcom/millennialmedia/internal/f/d$a;
+[Critical] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking:
+           Found a critical WebView "addJavascriptInterface" vulnerability. This method can be used to allow JavaScript to control the host
+           application.
+           This is a powerful feature, but also presents a security risk for applications targeted to API level JELLY_BEAN(4.2) or below,
+           because JavaScript could use reflection to access an injected object's public fields. Use of this method in a WebView containing
+           untrusted content could allow an attacker to manipulate the host application in unintended ways, executing Java code with the
+           permissions of the host application.
+           Reference:
+             1."http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface(java.lang.Object,
+           java.lang.String) "
+             2.https://labs.mwrinfosecurity.com/blog/2013/09/24/webview-addjavascriptinterface-remote-code-execution/
+             3.http://50.56.33.56/blog/?p=314
+             4.http://blog.trustlook.com/2013/09/04/alert-android-webview-addjavascriptinterface-code-execution-vulnerability/
+           Please modify the below code:
+               => Lcom/millennialmedia/internal/j;->a(Ljava/lang/String; Z)Ljava/lang/String; (0x2a) --->
+                    Lcom/millennialmedia/internal/k;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/millennialmedia/internal/j;->a(Ljava/lang/String; Z)Ljava/lang/String; (0x3e) --->
+                    Lcom/millennialmedia/internal/k;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/millennialmedia/internal/j;->a(Ljava/lang/String; Z)Ljava/lang/String; (0x52) --->
+                    Lcom/millennialmedia/internal/k;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/millennialmedia/internal/j;->a(Ljava/lang/String; Z)Ljava/lang/String; (0x66) --->
+                    Lcom/millennialmedia/internal/k;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/millennialmedia/internal/j;->a(Ljava/lang/String; Z)Ljava/lang/String; (0x7a) --->
+                    Lcom/millennialmedia/internal/k;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/millennialmedia/internal/f/f;->f()V (0x4) --->
+                    Lcom/millennialmedia/internal/f/f;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/mobfox/sdk/g/c;-><init>(Landroid/app/Activity; I I Ljava/lang/String; Ljava/lang/String;
+                    Lcom/mobfox/sdk/interstitial/b; Z)V (0x20) ---> Lcom/mobfox/sdk/g/c;->addJavascriptInterface(Ljava/lang/Object;
+                    Ljava/lang/String;)V
+               => Lcom/google/android/gms/internal/ads/azx;-><init>(Landroid/content/Context; Lcom/google/android/gms/internal/ads/mv;)V
+                    (0x66) ---> Lcom/google/android/gms/internal/ads/sm;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/google/android/gms/internal/ads/sk;-><init>(Lcom/google/android/gms/internal/ads/sb;
+                    Lcom/google/android/gms/internal/ads/sc; Ljava/lang/String; Z Z Lcom/google/android/gms/internal/ads/ahi;
+                    Lcom/google/android/gms/internal/ads/mv; Lcom/google/android/gms/internal/ads/ati;
+                    Lcom/google/android/gms/ads/internal/zzbo; Lcom/google/android/gms/ads/internal/zzw;
+                    Lcom/google/android/gms/internal/ads/amx;)V (0xe6) --->
+                    Lcom/google/android/gms/internal/ads/sm;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/inmobi/rendering/RenderView;->a(Lcom/inmobi/rendering/RenderView$a; Lcom/inmobi/ads/c;)V (0x1d0) --->
+                    Lcom/inmobi/rendering/RenderView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/google/android/gms/internal/ads/rb;-><init>(Lcom/google/android/gms/internal/ads/sb;
+                    Lcom/google/android/gms/internal/ads/sc; Ljava/lang/String; Z Z Lcom/google/android/gms/internal/ads/ahi;
+                    Lcom/google/android/gms/internal/ads/mv; Lcom/google/android/gms/internal/ads/ati;
+                    Lcom/google/android/gms/ads/internal/zzbo; Lcom/google/android/gms/ads/internal/zzw;
+                    Lcom/google/android/gms/internal/ads/amx;)V (0x134) --->
+                    Lcom/google/android/gms/internal/ads/rb;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/mobfox/sdk/i/b;->a(Lcom/mobfox/sdk/i/b;)V (0x4) ---> Lcom/mobfox/sdk/i/b;->addJavascriptInterface(Ljava/lang/Object;
+                    Ljava/lang/String;)V
+               => Lcom/mobfox/sdk/g/b;-><init>(Landroid/app/Activity; Lcom/mobfox/sdk/interstitial/b; Ljava/lang/String; Ljava/lang/String;
+                    I I Z Z)V (0x2e) ---> Lcom/mobfox/sdk/g/b;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;->addJavascriptInterfaces()V (0x14) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;->addJavascriptInterfaces()V (0x32) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;->addJavascriptInterfaces()V (0x58) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/startapp/android/publish/ads/splash/d;->a()V (0x5c) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/startapp/android/publish/adsCommon/adinformation/b;->onClick(Landroid/view/View;)V (0xf0) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/google/android/gms/internal/ads/sm;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V (0xc) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/h/a/a/a/f/a/a/d;->a(Landroid/webkit/WebView;)V (0x56) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/startapp/android/publish/ads/a/c;->u()V (0x18c) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+               => Lcom/startapp/android/publish/ads/banner/bannerstandard/BannerStandard;->initBanner()V (0xb2) --->
+                    Landroid/webkit/WebView;->addJavascriptInterface(Ljava/lang/Object; Ljava/lang/String;)V
+[Warning]  Dynamic Code Loading:
+           Dynamic code loading(DexClassLoader) found:
+               => Lcom/google/android/gms/internal/ads/ahz;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    Z)Lcom/google/android/gms/internal/ads/ahz; (0x1b8) ---> Ldalvik/system/DexClassLoader;-><init>(Ljava/lang/String;
+                    Ljava/lang/String; Ljava/lang/String; Ljava/lang/ClassLoader;)V
+               => Lcom/google/android/gms/internal/ads/aji;->b()V (0x24) --->
+                    Ldalvik/system/DexClassLoader;->loadClass(Ljava/lang/String;)Ljava/lang/Class;
+[Warning]  External Storage Accessing:
+           External storage access found (Remember DO NOT write important files to external storages):
+               => Lcom/e/a/r;->b(Landroid/content/Context;)Ljava/io/File; (0x8) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/google/android/gms/internal/ads/amx;->c(Lcom/google/android/gms/internal/ads/amz$a$b;)V (0x2) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/google/android/gms/internal/ads/asy;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/util/Map;)V (0x56) ---> Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/millennialmedia/internal/utils/d;->t()Ljava/lang/Long; (0x1c) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/springwalk/mediaconverter/b;->a(Landroid/content/Context;)V (0xb0) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/startapp/android/a/a;->a([Ljava/lang/String; Ljava/lang/String;)Z (0x50) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/startapp/android/publish/adsCommon/Utils/f;->a(Landroid/content/Context;)Ljava/lang/String; (0xa) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Le/d/a;->a(Landroid/content/Context; Landroid/net/Uri;)Ljava/lang/String; (0x66) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Le/d/a;->a(Landroid/content/Context; Landroid/net/Uri;)Ljava/lang/String; (0xb8) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Le/d/a;->a(Landroid/content/Context; Ljava/lang/String;)V (0x46) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/springwalk/mediaconverter/MainActivity;->a(Lcom/springwalk/mediaconverter/a/b;)Z (0x12) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lcom/springwalk/mediaconverter/MainActivity;->k()V (0x17c) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+[Warning]  AndroidManifest Exported Components Checking:
+           Found "exported" components(except for Launcher) for receiving outside applications' actions (AndroidManifest.xml).
+           These components can be initilized by other apps. You should add or modify the attribute to [exported="false"] if you don't want
+           to.
+           You can also protect it with a customized permission with "signature" or higher protectionLevel and specify in
+           "android:permission" attribute.
+                  service => com.google.firebase.iid.FirebaseInstanceIdService
+[Warning] <Sensitive_Information> Getting IMEI and Device ID:
+           This app has code getting the "device id(IMEI)" but there are problems with this "TelephonyManager.getDeviceId()" approach.
+           1.Non-phones: Wifi-only devices or music players that don't have telephony hardware just don't have this kind of unique
+           identifier.
+           2.Persistence: On devices which do have this, it persists across device data wipes and factory resets. It's not clear at all if,
+           in this situation, your app should regard this as the same device.
+           3.Privilege:It requires READ_PHONE_STATE permission, which is irritating if you don't otherwise use or need telephony.
+           4.Bugs: We have seen a few instances of production phones for which the implementation is buggy and returns garbage, for example
+           zeros or asterisks.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lcom/startapp/android/a/a;->g()Z (0x1a) ---> Landroid/telephony/TelephonyManager;->getDeviceId()Ljava/lang/String;
+[Warning] <Sensitive_Information> Getting ANDROID_ID:
+           This app has code getting the 64-bit number "Settings.Secure.ANDROID_ID".
+           ANDROID_ID seems a good choice for a unique device identifier. There are downsides: First, it is not 100% reliable on releases of
+           Android prior to 2.2 (Froyo).
+           Also, there has been at least one widely-observed bug in a popular handset from a major manufacturer, where every instance has
+           the same ANDROID_ID.
+           If you want to get an unique id for the device, we suggest you use "Installation" framework in the following article.
+           Please check the reference: http://android-developers.blogspot.tw/2011/03/identifying-app-installations.html
+               => Lcom/google/android/gms/internal/ads/mi;->a(Landroid/content/Context;)Ljava/lang/String; (0x14) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/ads/mi;->b(Landroid/content/Context;)Ljava/lang/String; (0x14) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/inmobi/commons/core/utilities/uid/c;->e()Ljava/lang/String; (0x1c) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/millennialmedia/internal/utils/d;->a(Ljava/lang/String;)Ljava/lang/String; (0x28) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lio/a/a/a/a/b/i;->f(Landroid/content/Context;)Z (0xc) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/e/in;->b(Lcom/google/android/gms/internal/e/dq; Lcom/google/android/gms/internal/e/cv;)V
+                    (0x79e) ---> Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver;
+                    Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/startapp/android/publish/adsCommon/BaseRequest;->setAndroidId(Landroid/content/Context;)V (0x56) --->
+                    Landroid/provider/Settings$Secure;->getString(Landroid/content/ContentResolver; Ljava/lang/String;)Ljava/lang/String;
+[Warning] <SSL_Security> SSL Certificate Verification Checking:
+           Please make sure this app has the conditions to check the validation of SSL Certificate. If it's not properly checked, it MAY
+           allows self-signed, expired or mismatch CN certificates for SSL connection.
+           This is a critical vulnerability and allows attackers to do MITM attacks without your knowledge.
+           If you are transmitting users' username or password, these sensitive information may be leaking.
+           Reference:
+           (1)OWASP Mobile Top 10 doc: https://www.owasp.org/index.php/Mobile_Top_10_2014-M3
+           (2)Android Security book: http://goo.gl/BFb65r
+           (3)https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=134807561
+           This vulnerability is much more severe than Apple's "goto fail" vulnerability: http://goo.gl/eFlovw
+           Please do not try to create a "X509Certificate" and override "checkClientTrusted", "checkServerTrusted", and "getAcceptedIssuers"
+           functions with blank implementation.
+           We strongly suggest you use the existing API instead of creating your own X509Certificate class.
+           Please modify or remove these vulnerable code:
+               --------------------------------------------------
+               [Maybe Vulnerable (Please manually confirm)]
+               => Le/e/a$2;
+                     -> used by: Le/e/a;->a()V
+               => Lio/a/a/a/a/e/h;
+                     -> used by: Lio/a/a/a/a/e/f;->a(Lio/a/a/a/a/e/g;)Ljavax/net/ssl/SSLSocketFactory;
+[Warning] <WebView> WebView Local File Access Attacks Checking:
+           Found "setAllowFileAccess(true)" or not set(enabled by default) in WebView. The attackers could inject malicious script into
+           WebView and exploit the opportunity to access local resources. This can be mitigated or prevented by disabling local file system
+           access. (It is enabled by default)
+           Note that this enables or disables file system access only. Assets and resources are still accessible using file:///android_asset
+           and file:///android_res.
+           The attackers can use "mWebView.loadUrl("file:///data/data/[Your_Package_Name]/[File]");" to access app's local file.
+           Reference: (1)https://labs.mwrinfosecurity.com/blog/2012/04/23/adventures-with-android-webviews/
+                      (2)http://developer.android.com/reference/android/webkit/WebSettings.html#setAllowFileAccess(boolean)
+           Please add or modify "yourWebView.getSettings().setAllowFileAccess(false)" to your WebView:
+               Lcom/c/a/a/a/g/b;-><init>(Landroid/webkit/WebView;)V
+               Lcom/c/a/a/a/g/c;->j()V
+               Lcom/g/a/a/c;->c()V
+               Lcom/google/android/gms/ads/internal/zzbp;-><init>(Landroid/content/Context; Lcom/google/android/gms/internal/ads/aou;
+                    Ljava/lang/String; Lcom/google/android/gms/internal/ads/mv;)V
+               Lcom/google/android/gms/internal/ads/alq;->run()V
+               Lcom/google/android/gms/internal/ads/jw;->a(Landroid/content/Context; Ljava/lang/String; Landroid/webkit/WebSettings;)V
+               Lcom/google/android/gms/internal/ads/jw;->d(Landroid/content/Context;)Ljava/lang/String;
+               Lcom/google/android/gms/internal/ads/kg;->call()Ljava/lang/Object;
+               Lcom/google/android/gms/internal/ads/ki;->a(Landroid/content/Context; Landroid/webkit/WebSettings;)Z
+               Lcom/google/android/gms/internal/ads/ki;->b(Landroid/content/Context;)V
+               Lcom/google/android/gms/internal/ads/kk;->a(Landroid/content/Context; Landroid/webkit/WebSettings;)Z
+               Lcom/google/android/gms/internal/ads/mc;->call()Ljava/lang/Object;
+               Lcom/google/android/gms/internal/ads/md;->call()Ljava/lang/Object;
+               Lcom/h/a/a/a/f/a/b/b;-><init>(Landroid/webkit/WebView;)V
+               Lcom/inmobi/commons/a/a;->a(Landroid/content/Context; Ljava/lang/String;)V
+               Lcom/inmobi/commons/a/a;->c(Landroid/content/Context;)Ljava/lang/String;
+               Lcom/inmobi/rendering/RenderView;->a(Lcom/inmobi/rendering/RenderView$a; Lcom/inmobi/ads/c;)V
+               Lcom/inmobi/rendering/a/c$b$1;->run()V
+               Lcom/millennialmedia/internal/utils/d$3;->run()V
+               Lcom/millennialmedia/internal/utils/d;->at()V
+               Lcom/moat/analytics/mobile/aol/j;->Ë(Ljava/lang/String;)Z
+               Lcom/moat/analytics/mobile/inm/j;->a(Landroid/webkit/WebView;)Z
+               Lcom/moat/analytics/mobile/mat/Ê¾;->Ë(Ljava/lang/String;)Z
+               Lcom/moat/analytics/mobile/ogury/f;->Ë(Ljava/lang/String;)Z
+               Lcom/moat/analytics/mobile/sma/j;->a(Landroid/webkit/WebView; Ljava/lang/String;)Z
+               Lcom/mobfox/sdk/c/a;->b(Landroid/content/Context;)Ljava/lang/String;
+               Lcom/mobfox/sdk/g/a;->setWebViewSettings(Lcom/mobfox/sdk/g/a;)V
+               Lcom/mobfox/sdk/h/d;->a(Landroid/content/Context; Landroid/webkit/WebView;)V
+               Lcom/mobfox/sdk/i/b;-><init>(Landroid/content/Context; Lcom/mobfox/sdk/i/d;)V
+               Lcom/smaato/soma/ExpandedBannerActivity;->getCurrentPackage()Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;
+               Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;->createBaseView()Landroid/webkit/WebView;
+               Lcom/smaato/soma/cmpconsenttool/CMPConsentToolActivity;->onCreate(Landroid/os/Bundle;)V
+               Lcom/smaato/soma/internal/connector/MraidConnector;->handleExpand(Z)V
+               Lcom/smaato/soma/internal/requests/RequestsBuilder;->setUserAgent(Landroid/content/Context;)V
+               Lcom/smaato/soma/video/VASTAdActivity$2;->process()Ljava/lang/Void;
+               Lcom/startapp/android/publish/ads/a/c;->u()V
+               Lcom/startapp/android/publish/ads/banner/bannerstandard/BannerStandard;->prepareWebView(Landroid/webkit/WebView;)V
+               Lcom/startapp/android/publish/ads/splash/d;->a()V
+               Lcom/startapp/android/publish/adsCommon/Utils/i;->a(Landroid/content/Context; Ljava/lang/String;
+                    Lcom/startapp/android/publish/adsCommon/Utils/i$a;)V
+               Lcom/startapp/android/publish/adsCommon/adinformation/b;->onClick(Landroid/view/View;)V
+               Lcom/startapp/android/publish/adsCommon/c;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/String; J J Z Ljava/lang/Boolean; Ljava/lang/Runnable;)V
+               Lcom/startapp/android/publish/adsCommon/m$4;->run()V
+               Lcom/startapp/android/publish/inappbrowser/a;->z()V
+               Lcom/startapp/common/a/c;->a(Landroid/webkit/WebView;)V
+               Lcom/truenet/android/a/i$a$a;->run()V
+               Lcom/truenet/android/b$g;->b()Landroid/webkit/WebView;
+               Lio/presage/ChinGentsai;-><init>(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;)V
+               Lio/presage/MunsterauCumin;->a(Landroid/webkit/WebView;)V
+               Lio/presage/MunsterauCumin;->c(Landroid/webkit/WebView;)V
+               Lio/presage/OlivetalaSauge;->b()V
+               Lio/presage/Soumaintrain;->a(Landroid/webkit/WebView;)V
+               Lio/presage/StMarcellin;->a(Lio/presage/Taleggio;)V
+               Lio/presage/e;->a(Lio/presage/d;)V
+[Warning] <WebView> WebView Potential XSS Attacks Checking:
+           Found "setJavaScriptEnabled(true)" in WebView, which could exposed to potential XSS attacks. Please check the web page code
+           carefully and sanitize the output:
+               => Lcom/g/a/a/c;->c()V (0x18) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/inmobi/rendering/a/c$b$1;->run()V (0x7a) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/millennialmedia/internal/k;-><init>(Landroid/content/Context; Lcom/millennialmedia/internal/k$f;
+                    Lcom/millennialmedia/internal/k$e;)V (0xfc) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/moat/analytics/mobile/aol/a;-><init>(Landroid/app/Application; I)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/moat/analytics/mobile/inm/g;-><init>(Landroid/content/Context; Lcom/moat/analytics/mobile/inm/g$a;)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/moat/analytics/mobile/mat/Ë;-><init>(Landroid/app/Application; I)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/moat/analytics/mobile/ogury/d;-><init>(Landroid/content/Context; I)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/moat/analytics/mobile/sma/g;-><init>(Landroid/content/Context; Lcom/moat/analytics/mobile/sma/g$a;)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/mobfox/sdk/g/a;->setWebViewSettings(Lcom/mobfox/sdk/g/a;)V (0x24) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;->createBaseView()Landroid/webkit/WebView; (0xde) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/ads/splash/d;->a()V (0xe) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/adsCommon/Utils/i;->a(Landroid/content/Context; Ljava/lang/String;
+                    Lcom/startapp/android/publish/adsCommon/Utils/i$a;)V (0x7c) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/adsCommon/adinformation/b;->onClick(Landroid/view/View;)V (0x96) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/adsCommon/c;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    Ljava/lang/String; J J Z Ljava/lang/Boolean; Ljava/lang/Runnable;)V (0x1ec) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lio/presage/ChinGentsai;-><init>(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;)V (0x30) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lio/presage/MunsterauCumin;->a(Landroid/webkit/WebView;)V (0x5e) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lio/presage/OlivetalaSauge;->b()V (0x44) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lio/presage/Soumaintrain;->a(Landroid/webkit/WebView;)V (0x14) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/c/a/a/a/g/b;-><init>(Landroid/webkit/WebView;)V (0x28) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/c/a/a/a/g/c;->j()V (0x2c) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/internal/ads/sm;-><init>(Lcom/google/android/gms/internal/ads/sb;)V (0xb2) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/h/a/a/a/f/a/b/b;-><init>(Landroid/webkit/WebView;)V (0x32) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/inmobi/rendering/RenderView;->a(Lcom/inmobi/rendering/RenderView$a; Lcom/inmobi/ads/c;)V (0x18e) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/mobfox/sdk/i/b;-><init>(Landroid/content/Context; Lcom/mobfox/sdk/i/d;)V (0x6c) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/smaato/soma/ExpandedBannerActivity;->getCurrentPackage()Lcom/smaato/soma/bannerutilities/AbstractBannerPackage;
+                    (0x50) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/smaato/soma/video/VASTAdActivity$2;->process()Ljava/lang/Void; (0x4a) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/ads/a/c;->u()V (0x13a) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/ads/banner/bannerstandard/BannerStandard;->prepareWebView(Landroid/webkit/WebView;)V (0x18)
+                    ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/startapp/android/publish/inappbrowser/a;->z()V (0xe) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/ads/internal/zzbp;-><init>(Landroid/content/Context; Lcom/google/android/gms/internal/ads/aou;
+                    Ljava/lang/String; Lcom/google/android/gms/internal/ads/mv;)V (0x68) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/truenet/android/b$g;->b()Landroid/webkit/WebView; (0x3e) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/google/android/gms/internal/ads/rb;-><init>(Lcom/google/android/gms/internal/ads/sb;
+                    Lcom/google/android/gms/internal/ads/sc; Ljava/lang/String; Z Z Lcom/google/android/gms/internal/ads/ahi;
+                    Lcom/google/android/gms/internal/ads/mv; Lcom/google/android/gms/internal/ads/ati;
+                    Lcom/google/android/gms/ads/internal/zzbo; Lcom/google/android/gms/ads/internal/zzw;
+                    Lcom/google/android/gms/internal/ads/amx;)V (0xae) ---> Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+               => Lcom/smaato/soma/cmpconsenttool/CMPConsentToolActivity;->onCreate(Landroid/os/Bundle;)V (0x86) --->
+                    Landroid/webkit/WebSettings;->setJavaScriptEnabled(Z)V
+[Notice]  AndroidManifest Adb Backup Checking:
+           ADB Backup is ENABLED for this app (default: ENABLED). ADB Backup is a good tool for backing up all of your files. If it's open
+           for this app, people who have your phone can copy all of the sensitive data for this app in your phone (Prerequisite: 1.Unlock
+           phone's screen 2.Open the developer mode). The sensitive data may include lifetime access token, username or password, etc.
+           Security case related to ADB Backup:
+           1.http://www.securityfocus.com/archive/1/530288/30/0/threaded
+           2.http://blog.c22.cc/advisories/cve-2013-5112-evernote-android-insecure-storage-of-pin-data-bypass-of-pin-protection/
+           3.http://nelenkov.blogspot.co.uk/2012/06/unpacking-android-backups.html
+           Reference: http://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+[Notice] <Command> Executing "root" or System Privilege Checking:
+           The app may has the code checking for "root" permission, mounting filesystem operations or monitoring system:
+               Lio/presage/case/RugalBernstein;->c()Z  => '/system/bin/failsafe/su'
+               Lcom/startapp/android/b/c;->b()Z  => '/system/bin/failsafe/su'
+               Lcom/startapp/android/b/a;->a()Z  => 'su'
+               Lcom/startapp/android/b/a;->h()Z  => 'su'
+               Lio/presage/case/ChinGentsai;->d(Landroid/content/Context;)Z  => 'su'
+               Lio/presage/case/RugalBernstein;->d()Z  => 'su'
+               Lio/presage/case/RugalBernstein;->c()Z  => '/system/bin/su'
+               Lio/presage/case/ChinGentsai;->a([Ljava/lang/String;)I  => 'su'
+               Lcom/startapp/android/b/c;->c()Z  => 'su'
+               Lcom/startapp/android/b/c;->b()Z  => '/system/bin/su'
+               Lcom/startapp/android/a/a;->l()Z  => '/system/bin/'
+               Lcom/startapp/android/b/b;-><clinit>()V  => '/system/bin/failsafe/'
+               Lcom/startapp/android/b/b;-><clinit>()V  => '/system/bin/'
+               Lcom/google/android/gms/common/util/g;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;
+                    I)Ljava/lang/String;  => '/system/bin/logcat'
+               Lcom/startapp/android/b/b;-><clinit>()V  => '/system/bin'
+               Lio/presage/PSD;->j()V  => '/system/bin/'
+               Lcom/startapp/android/b/b;-><clinit>()V  => '/system/bin/.ext/'
+               Lcom/startapp/android/a/a;->l()Z  => '/system/bin/netcfg'
+[Notice] <Database><#CVE-2011-3901#> Android SQLite Databases Vulnerability Checking:
+           This app is using Android SQLite databases.
+           Prior to Android 4.0, Android has SQLite Journal Information Disclosure Vulnerability.
+           But it can only be solved by users upgrading to Android > 4.0 and YOU CANNOT SOLVE IT BY YOURSELF (But you can use encrypt your
+           databases and Journals by "SQLCipher" or other libs).
+           Proof-Of-Concept Reference:
+           (1) http://blog.watchfire.com/files/androidsqlitejournal.pdf
+           (2) http://www.youtube.com/watch?v=oCXLHjmH5rY
+[Notice]  File Unsafe Delete Checking:
+           Everything you delete may be recovered by any user or attacker, especially rooted devices.
+           Please make sure do not use "file.delete()" to delete essential files.
+           Check this video: https://www.youtube.com/watch?v=tGw1fxUD-uY
+               => Lcom/crashlytics/android/c/aa;->a(Ljava/util/Set;)V (0x38) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/ax;->a(Ljava/io/File; Ljava/io/FilenameFilter; I Ljava/util/Comparator;)I (0x28) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/k;->a(Ljava/lang/String;)V (0x14) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/k;->a([Ljava/io/File; Ljava/util/Set;)V (0x60) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/k;->a([Ljava/io/File; Ljava/util/Set;)V (0xb2) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/k;->b(Ljava/io/File;)V (0x2c) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/k;->a([Ljava/io/File;)V (0x12a) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/m;->c()Z (0x8) ---> Ljava/io/File;->delete()Z
+               => Lcom/e/a/a/d;->e(Ljava/io/File;)V (0x0) ---> Ljava/io/File;->delete()Z
+               => Lcom/f/a/d;->b(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String;)V (0x64) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/ahz;->a(Ljava/io/File;)V (0x38) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/e/ao;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x68) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/e/dh;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x70) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/e/dz;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase; (0x40) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/firebase/iid/af;->a(Landroid/content/Context;)V (0x34) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/commons/core/utilities/c;->a(Ljava/io/File;)V (0x38) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/commons/core/utilities/c;->a(Ljava/io/File;)V (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/sdk/InMobiSdk$1;->run()V (0x1e6) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/sdk/a;->a(Landroid/content/Context;)Z (0xfe) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/sdk/a;->a(Landroid/content/Context;)Z (0x1d0) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/sdk/a;->a(Landroid/content/Context;)Z (0x24c) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/sdk/a;->a(Landroid/content/Context;)Z (0x2c0) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/f$g;->a([Ljava/io/File;)V (0xe) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/f$g;->b(Ljava/io/File; Z)Z (0xce) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/utils/j$2;->onScanCompleted(Ljava/lang/String; Landroid/net/Uri;)V (0x10) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/smaato/soma/video/utilities/DiskLruCache;->deleteIfExists(Ljava/io/File;)V (0xc) ---> Ljava/io/File;->delete()Z
+               => Lcom/smaato/soma/video/utilities/DiskLruCache;->open(Ljava/io/File; I I J)Lcom/smaato/soma/video/utilities/DiskLruCache;
+                    (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/smaato/soma/video/utilities/DiskLruCache;->rebuildJournal()V (0x198) ---> Ljava/io/File;->delete()Z
+               => Lcom/smaato/soma/video/utilities/DiskLruCache;->remove(Ljava/lang/String;)Z (0x50) ---> Ljava/io/File;->delete()Z
+               => Lcom/smaato/soma/video/utilities/DiskLruCacheUtil;->deleteContents(Ljava/io/File;)V (0x2a) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/MainActivity$22;->run()V (0x644) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/b;->a(Landroid/content/Context;)V (0x1c0) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/b;->a(Ljava/lang/String;)Z (0x82) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/d;->b()V (0x4e) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/d;->b()V (0x138) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/android/publish/ads/video/c;->a(Landroid/content/Context; Ljava/net/URL; Ljava/lang/String;
+                    Lcom/startapp/android/publish/ads/video/c$a;)Ljava/lang/String; (0x1e8) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/android/publish/ads/video/c;->a(Landroid/content/Context; Ljava/net/URL; Ljava/lang/String;
+                    Lcom/startapp/android/publish/ads/video/c$a;)Ljava/lang/String; (0x2c6) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/android/publish/ads/video/c;->c(Ljava/lang/String;)V (0x16) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/android/publish/ads/video/d;->a(I)Z (0x70) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/android/publish/ads/video/h;->a(Landroid/content/Context; Ljava/net/URL;
+                    Ljava/lang/String;)Ljava/lang/String; (0x19a) ---> Ljava/io/File;->delete()Z
+               => Lcom/startapp/common/a/e;->a(Ljava/io/File;)V (0x2c) ---> Ljava/io/File;->delete()Z
+               => Le/c/b;->a(Ljava/lang/String;)Ljava/io/File; (0x30) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x246) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x4ac) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x552) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x5e2) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x67e) ---> Ljava/io/File;->delete()Z
+               => Lio/presage/case/do/KyoKusanagi;->a(Ljava/lang/String; Lio/presage/case/do/ChinGentsai; Landroid/content/Context; Z
+                    Ljava/lang/String;)V (0x70a) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/ah;->f()V (0x50) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/ah;->f()V (0x98) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/am;->d()V (0xa) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/ar;->f()V (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/crashlytics/android/c/z;->f()V (0x4c) ---> Ljava/io/File;->delete()Z
+               => Lcom/e/a/a/e;->a(Ljava/util/List;)V (0x44) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/ln;->b(Ljava/lang/String;)V (0xa) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/ln;->a()V (0xb2) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/ln;->a(Ljava/lang/String; Lcom/google/android/gms/internal/ads/agz;)V (0x94) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/ln;->a(Ljava/lang/String; Lcom/google/android/gms/internal/ads/agz;)V (0x1e2) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/inmobi/ads/cache/AssetStore;->a(Lcom/inmobi/ads/cache/a;)V (0x20) ---> Ljava/io/File;->delete()Z
+               => Lcom/inmobi/ads/cache/AssetStore;->a(Lcom/inmobi/ads/cache/a; Lcom/inmobi/ads/cache/e;)Z (0x1ee) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/inmobi/ads/cache/AssetStore;->a(Lcom/inmobi/ads/cache/a; Lcom/inmobi/ads/cache/e;)Z (0x24a) --->
+                    Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/f/e;->a(Landroid/content/Context;)V (0xc0) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/f/e;->b()V (0x2e) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/utils/j$3;->a(Landroid/content/Intent;)V (0x32) ---> Ljava/io/File;->delete()Z
+               => Lcom/millennialmedia/internal/utils/j$3;->a(Ljava/lang/String;)V (0x1c) ---> Ljava/io/File;->delete()Z
+               => Ld/a/i/a$1;->a(Ljava/io/File;)V (0x0) ---> Ljava/io/File;->delete()Z
+               => Lio/a/a/a/a/d/h;->a(Ljava/io/File; Ljava/io/File;)V (0x36) ---> Ljava/io/File;->delete()Z
+               => Lio/a/a/a/a/d/h;->a(Ljava/io/File; Ljava/io/File;)V (0x64) ---> Ljava/io/File;->delete()Z
+               => Lio/a/a/a/a/d/h;->a(Ljava/util/List;)V (0x4a) ---> Ljava/io/File;->delete()Z
+               => Lio/a/a/a/a/d/h;->d()V (0xe) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/qf;->a(Ljava/lang/String;)Z (0xf4) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/qf;->a(Ljava/lang/String;)Z (0x110) ---> Ljava/io/File;->delete()Z
+               => Lcom/google/android/gms/internal/ads/qf;->a(Ljava/lang/String;)Z (0xae4) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/MainActivity;->a(Landroid/content/Intent;)V (0x11e) ---> Ljava/io/File;->delete()Z
+               => Lcom/springwalk/mediaconverter/MainActivity;->a(Landroid/content/Intent;)V (0x19c) ---> Ljava/io/File;->delete()Z
+[Notice] <Debug><Hacker> Codes for Checking Android Debug Mode:
+           Found codes for checking "ApplicationInfo.FLAG_DEBUGGABLE" in AndroidManifest.xml:
+               => Lcom/google/android/gms/common/o;->b (Landroid/content/pm/PackageInfo;)Lcom/google/android/gms/common/x;
+               => Lcom/moat/analytics/mobile/inm/s;->b (Landroid/content/Context;)Z
+               => Lcom/moat/analytics/mobile/ogury/s;->à¥± (Landroid/content/Context;)Z
+               => Lcom/moat/analytics/mobile/sma/k;->a (Landroid/content/Context;)Z
+               => Lio/a/a/a/a/b/i;->i (Landroid/content/Context;)Z
+               => Lcom/moat/analytics/mobile/aol/r;->Ë (Landroid/content/Context;)Z
+               => Lcom/moat/analytics/mobile/mat/Ë;->Ë (Landroid/content/Context;)Z
+[Notice] <Hacker> APK Installing Source Checking:
+           This app has code checking APK installer sources(e.g. from Google Play, from Amazon, etc.). It might be used to check for whether
+           the app is hacked by the attackers.
+               => Lcom/google/android/gms/analytics/r;->a()Lcom/google/android/gms/internal/e/jw; (0x3a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/inmobi/commons/core/utilities/b/a;-><init>()V (0x5c) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/moat/analytics/mobile/aol/r$e;-><init>()V (0x6a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/moat/analytics/mobile/inm/s$a;-><init>()V (0x6a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/moat/analytics/mobile/mat/Ë$Ë;-><init>()V (0x6a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/moat/analytics/mobile/ogury/s$a;-><init>()V (0x6a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/startapp/android/publish/adsCommon/Utils/i;->d(Landroid/content/Context;)Ljava/lang/String; (0x10) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/startapp/android/publish/adsCommon/l;->a(Landroid/content/pm/PackageInfo; Landroid/content/pm/PackageManager;
+                    Ljava/util/Set;)V (0x4) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/e/in;->a(Landroid/content/Context; Ljava/lang/String; Ljava/lang/String; Z Z Z
+                    J)Lcom/google/android/gms/internal/e/cv; (0x3a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lio/a/a/a/a/b/q$1;->a(Landroid/content/Context;)Ljava/lang/String; (0x10) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+               => Lcom/google/android/gms/internal/e/dx;->o_()V (0x5a) --->
+                    Landroid/content/pm/PackageManager;->getInstallerPackageName(Ljava/lang/String;)Ljava/lang/String;
+[Notice] <KeyStore><Hacker> KeyStore Protection Information:
+           The Keystores below are "protected" by password and seem using SSL-pinning (Total: 1). You can use "Portecle" tool to manage the
+           certificates in the KeyStore:
+               => Lio/a/a/a/a/e/i;->a(Ljava/io/InputStream; Ljava/lang/String;)Ljava/security/KeyStore; (0x1e) --->
+                    Ljava/security/KeyStore;->load(Ljava/io/InputStream; [C)V
+[Notice] <Signature><Hacker> Getting Signature Code Checking:
+           This app has code checking the package signature in the code. It might be used to check for whether the app is hacked by the
+           attackers.
+               => Lcom/google/android/gms/common/n;->zza(Landroid/content/Context; Z I)I (0x50) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/google/android/gms/common/util/v;->a(Landroid/content/Context; I)Z (0x24) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/startapp/common/a/c;->j(Landroid/content/Context;)Ljava/lang/String; (0x18) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+               => Lcom/springwalk/mediaconverter/MainActivity;->i()I (0x16) --->
+                    Landroid/content/pm/PackageManager;->getPackageInfo(Ljava/lang/String; I)Landroid/content/pm/PackageInfo;
+[Notice]  AndroidManifest Exported Components Checking 2:
+           Found "exported" components(except for Launcher) for receiving Google's "Android" actions (AndroidManifest.xml):
+                 activity => io.presage.mraid.browser.ShortcutActivity
+                 receiver => com.startapp.android.publish.common.metaData.BootCompleteListener
+[Info] <Database> SQLiteDatabase Transaction Deprecated Checking:
+           Ignore checking "SQLiteDatabase:beginTransactionNonExclusive" because your set minSdk >= 11.
+[Info] <Database> Android SQLite Databases Encryption (SQLite Encryption Extension (SEE)):
+           This app is "NOT" using SQLite Encryption Extension (SEE) on Android (http://www.sqlite.org/android) to encrypt or decrpyt
+           databases.
+[Info] <Database> Android SQLite Databases Encryption (SQLCipher):
+           This app is "NOT" using SQLCipher(http://sqlcipher.net/) to encrypt or decrpyt databases.
+[Info] <Debug> Android Debug Mode Checking:
+           DEBUG mode is OFF(android:debuggable="false") in AndroidManifest.xml.
+[Info] <#BID 64208, CVE-2013-6271#> Fragment Vulnerability Checking:
+           Did not detect the vulnerability of "Fragment" dynamically loading into "PreferenceActivity" or "SherlockPreferenceActivity"
+[Info] <Framework> Framework - MonoDroid:
+           This app is NOT using MonoDroid Framework (http://xamarin.com/android).
+[Info] <Hacker> Base64 String Encryption:
+           No encoded Base64 String or Urls found.
+[Info] <Database><Hacker> Key for Android SQLite Databases Encryption:
+           Did not find using the symmetric key(PRAGMA key) to encrypt the SQLite databases (It's still possible that it might use but we
+           did not find out).
+[Info] <KeyStore><Hacker> KeyStore File Location:
+           Did not find any possible BKS keystores or certificate keystore file (Notice: It does not mean this app does not use keysotre):
+[Info] <Hacker> Code Setting Preventing Screenshot Capturing:
+           Did not detect this app has code setting preventing screenshot capturing.
+[Info]  HttpURLConnection Android Bug Checking:
+           Ignore checking "http.keepAlive" because you're not using "HttpURLConnection" and min_Sdk > 8.
+[Info] <KeyStore> KeyStore Type Checking:
+           KeyStore 'BKS' type check OK
+[Info]  Google Cloud Messaging Suggestion:
+           Nothing to suggest.
+[Info] <#CVE-2013-4787#> Master Key Type I Vulnerability:
+           No Master Key Type I Vulnerability in this APK.
+[Info]  App Sandbox Permission Checking:
+           No security issues "MODE_WORLD_READABLE" or "MODE_WORLD_WRITEABLE" found on 'openOrCreateDatabase' or 'openOrCreateDatabase2' or
+           'getDir' or 'getSharedPreferences' or 'openFileOutput'
+[Info]  Native Library Loading Checking:
+           No native library loaded.
+[Info]  AndroidManifest Dangerous ProtectionLevel of Permission Checking:
+           No "dangerous" protection level customized permission found (AndroidManifest.xml).
+[Info]  AndroidManifest PermissionGroup Checking:
+           PermissionGroup in permission tag of AndroidManifest sets correctly.
+[Info]  AndroidManifest "intent-filter" Settings Checking:
+           "intent-filter" of AndroidManifest.xml check OK.
+[Info]  AndroidManifest Normal ProtectionLevel of Permission Checking:
+           No default or "normal" protection level customized permission found (AndroidManifest.xml).
+[Info] <#CVE-2013-6272#> AndroidManifest Exported Lost Prefix Checking:
+           No exported components that forgot to add "android:" prefix.
+[Info]  AndroidManifest ContentProvider Exported Checking:
+           No exported "ContentProvider" found (AndroidManifest.xml).
+[Info]  Codes for Sending SMS:
+           Did not detect this app has code for sending SMS messages (sendDataMessage, sendMultipartTextMessage or sendTextMessage).
+[Info] <System> AndroidManifest sharedUserId Checking:
+           This app does not use "android.uid.system" sharedUserId.
+[Info] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Fields):
+           Critical vulnerability "ALLOW_ALL_HOSTNAME_VERIFIER" field setting or "AllowAllHostnameVerifier" class instance not found.
+[Info] <SSL_Security> SSL Implementation Checking (Insecure component):
+           Did not detect SSLSocketFactory by insecure method "getInsecure".
+[Info] <SSL_Security> SSL Implementation Checking (HttpHost):
+           DEFAULT_SCHEME_NAME for HttpHost check: OK
+[Info] <SSL_Security> SSL Implementation Checking (WebViewClient for WebView):
+           Did not detect critical usage of "WebViewClient"(MITM Vulnerability).
+[Info]  Unnecessary Permission Checking:
+           Permission 'android.permission.ACCESS_MOCK_LOCATION' sets correctly.
+[Info]  Accessing the Internet Checking:
+           This app is using the Internet via HTTP protocol.
+[Info]  AndroidManifest System Use Permission Checking:
+           No system-level critical use-permission found.
+------------------------------------------------------------
+AndroBugs analyzing time: 29.432078 secs
+Total elapsed time: 109.553255 secs

@@ -1,0 +1,213 @@
+*************************************************************************
+**   AndroBugs Framework - Android App Security Vulnerability Scanner  **
+**                            version: 1.0.0                           **
+**     author: Yu-Cheng Lin (@AndroBugs, http://www.AndroBugs.com)     **
+**               contact: androbugs.framework@gmail.com                **
+*************************************************************************
+Platform: Android
+Package Name: org.videolan.vlc.betav7neon
+Package Version Name: 1.0.0
+Package Version Code: 10000
+Min Sdk: 7
+Target Sdk: 21
+MD5   : c34969f527a5cece5814ca560f460baa
+SHA1  : 7fdfc6723eabfffe7626d7bb2f91a9c5730f7b95
+SHA256: 3dcb156b089f03095c49bc573e91450508d96d97134cd949cb38bba6c68a8903
+SHA512: be51cf7c1c0e856ae49ace0899ef73abe724c9b4df126bcd5241148ad398fc71ce5e89ddb5a2f3f6a5f5b898519493d6daf61458870f704d4b9ea89f645a1b82
+Analyze Signature: d68d29e2b73f74d0f0087ba69edd591bddadf5072f9307bb8a772836cbafeb74cf4144c5c9704648b0b8c70f42f186bfa5b942312637c190e68f9cb10bc64e99
+------------------------------------------------------------------------------------------------
+[Critical] <#BID 64208, CVE-2013-6271#> Fragment Vulnerability Checking:
+           'Fragment' or 'Fragment for ActionbarSherlock' has a severe vulnerability prior to Android 4.4 (API 19).
+           Please check:
+           (1)http://developer.android.com/reference/android/os/Build.VERSION_CODES.html#KITKAT
+           (2)http://developer.android.com/reference/android/preference/PreferenceActivity.html#isValidFragment(java.lang.String)
+           (3)http://stackoverflow.com/questions/19973034/isvalidfragment-android-api-19
+           (4)http://securityintelligence.com/new-vulnerability-android-framework-fragment-injection/
+           (5)http://securityintelligence.com/wp-content/uploads/2013/12/android-collapses-into-fragments.pdf
+           (6)https://cureblog.de/2013/11/cve-2013-6271-remove-device-locks-from-android-phone/
+               You MUST override 'isValidFragment' method in every "PreferenceActivity" class to avoid Exception throwing in Android 4.4:
+                   Lorg/videolan/vlc/betav7neon/gui/PreferencesActivity;
+               All of the potential vulnerable "fragment":
+                   Lorg/videolan/android/ui/GridFragment;
+                   Lorg/videolan/vlc/betav7neon/gui/AboutFragment;
+                   Lorg/videolan/vlc/betav7neon/gui/audio/AudioAlbumsSongsFragment;
+                   Lorg/videolan/vlc/betav7neon/gui/audio/AudioBrowserFragment;
+                   Lorg/videolan/vlc/betav7neon/gui/audio/AudioPlayer;
+                   Lorg/videolan/vlc/betav7neon/gui/audio/EqualizerFragment;
+[Critical] <SSL_Security> SSL Connection Checking:
+           URLs that are NOT under SSL (Total:2):
+               http://people.videolan.org/~jb/blacklist/vlc-devices.php
+                   => Lorg/videolan/vlc/betav7neon/gui/CompatErrorActivity$AsyncHttpRequest;->doInBackground([Ljava/lang/String;)Ljava/lang/
+                    Boolean;
+               http://people.videolan.org/~magsoft/vlc-android_crashes/upload_crash_log.php
+                   => Lorg/videolan/vlc/betav7neon/gui/NativeCrashActivity$AsyncHttpRequest;->doInBackground([Ljava/lang/String;)Ljava/lang/
+                    Boolean;
+[Warning]  External Storage Accessing:
+           External storage access found (Remember DO NOT write important files to external storages):
+               => Lorg/videolan/libvlc/Media;-><clinit>()V (0x65a) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/VLCCrashHandler;->uncaughtException(Ljava/lang/Thread; Ljava/lang/Throwable;)V (0xce) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/BrowserAdapter;->getVisibleName(Ljava/io/File;)Ljava/lang/String; (0x14) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/CommonDialogs$3;->onClick(Landroid/view/View;)V (0x12) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/DirectoryAdapter;->getVisibleName(Ljava/io/File;)Ljava/lang/String; (0x14) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/PreferencesActivity$10;->onPreferenceClick(Landroid/preference/Preference;)Z (0x52) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/audio/AudioUtil;->prepareCacheFolder(Landroid/content/Context;)V (0x12c) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/util/AndroidDevices;->getStorageDirectories()[Ljava/lang/String; (0xe) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/video/VideoPlayerActivity;->loadMedia()V (0x300) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+               => Lorg/videolan/vlc/betav7neon/gui/video/VideoPlayerActivity;->loadMedia()V (0x39a) --->
+                    Landroid/os/Environment;->getExternalStorageDirectory()Ljava/io/File;
+[Warning]  AndroidManifest Exported Components Checking:
+           Found "exported" components(except for Launcher) for receiving outside applications' actions (AndroidManifest.xml).
+           These components can be initilized by other apps. You should add or modify the attribute to [exported="false"] if you don't want
+           to.
+           You can also protect it with a customized permission with "signature" or higher protectionLevel and specify in
+           "android:permission" attribute.
+                 receiver => org.videolan.vlc.betav7neon.RemoteControlClientReceiver
+[Notice]  AndroidManifest Adb Backup Checking:
+           ADB Backup is ENABLED for this app (default: ENABLED). ADB Backup is a good tool for backing up all of your files. If it's open
+           for this app, people who have your phone can copy all of the sensitive data for this app in your phone (Prerequisite: 1.Unlock
+           phone's screen 2.Open the developer mode). The sensitive data may include lifetime access token, username or password, etc.
+           Security case related to ADB Backup:
+           1.http://www.securityfocus.com/archive/1/530288/30/0/threaded
+           2.http://blog.c22.cc/advisories/cve-2013-5112-evernote-android-insecure-storage-of-pin-data-bypass-of-pin-protection/
+           3.http://nelenkov.blogspot.co.uk/2012/06/unpacking-android-backups.html
+           Reference: http://developer.android.com/guide/topics/manifest/application-element.html#allowbackup
+[Notice] <Database><#CVE-2011-3901#> Android SQLite Databases Vulnerability Checking:
+           This app is using Android SQLite databases.
+           Prior to Android 4.0, Android has SQLite Journal Information Disclosure Vulnerability.
+           But it can only be solved by users upgrading to Android > 4.0 and YOU CANNOT SOLVE IT BY YOURSELF (But you can use encrypt your
+           databases and Journals by "SQLCipher" or other libs).
+           Proof-Of-Concept Reference:
+           (1) http://blog.watchfire.com/files/androidsqlitejournal.pdf
+           (2) http://www.youtube.com/watch?v=oCXLHjmH5rY
+[Notice]  File Unsafe Delete Checking:
+           Everything you delete may be recovered by any user or attacker, especially rooted devices.
+           Please make sure do not use "file.delete()" to delete essential files.
+           Check this video: https://www.youtube.com/watch?v=tGw1fxUD-uY
+               => Lorg/videolan/vlc/betav7neon/gui/CommonDialogs$1;->onClick(Landroid/content/DialogInterface; I)V (0x4) --->
+                    Ljava/io/File;->delete()Z
+               => Lorg/videolan/vlc/betav7neon/gui/audio/AudioUtil;->deleteContent(Ljava/io/File; Z)V (0x34) ---> Ljava/io/File;->delete()Z
+[Notice]  Google Cloud Messaging Suggestion:
+           Your supporting minSdk is 7
+           You are now allowing minSdk to less than 8. Please check: http://developer.android.com/about/dashboards/index.html
+           Google Cloud Messaging (Push Message) service only allows Android SDK >= 8 (Android 2.2). Pleae check:
+           http://developer.android.com/google/gcm/gcm.html
+           You may have the change to use GCM in the future, so please set minSdk to at least 9.
+[Notice]  Native Library Loading Checking:
+           Native library loading codes(System.loadLibrary(...)) found:
+               [libiomx-gingerbread.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0x12) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libvlcjni.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0x1c) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libiomx-hc.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0x34) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libiomx-ics.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0x8c) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libiomx-jbmr2.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0xa4) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+               [libiomx-kk.so]
+               => Lorg/videolan/libvlc/LibVLC;-><clinit>()V (0xbc) ---> Ljava/lang/System;->loadLibrary(Ljava/lang/String;)V
+[Notice]  AndroidManifest Exported Components Checking 2:
+           Found "exported" components(except for Launcher) for receiving Google's "Android" actions (AndroidManifest.xml):
+                 activity => org.videolan.vlc.betav7neon.gui.video.VideoPlayerActivity
+                 receiver => org.videolan.vlc.betav7neon.PhoneStateReceiver
+[Info] <Command> Runtime Command Checking:
+           This app is not using critical function 'Runtime.getRuntime().exec("...")'.
+[Info] <Command> Executing "root" or System Privilege Checking:
+           Did not find codes checking "root" permission(su) or getting system permission (It's still possible we did not find out).
+[Info] <Database> SQLiteDatabase Transaction Deprecated Checking:
+           Ignore checking "SQLiteDatabase:beginTransactionNonExclusive" you're not using it.
+[Info] <Database> Android SQLite Databases Encryption (SQLite Encryption Extension (SEE)):
+           This app is "NOT" using SQLite Encryption Extension (SEE) on Android (http://www.sqlite.org/android) to encrypt or decrpyt
+           databases.
+[Info] <Database> Android SQLite Databases Encryption (SQLCipher):
+           This app is "NOT" using SQLCipher(http://sqlcipher.net/) to encrypt or decrpyt databases.
+[Info] <Debug> Android Debug Mode Checking:
+           DEBUG mode is OFF(android:debuggable="false") in AndroidManifest.xml.
+[Info]  Dynamic Code Loading:
+           No dynamic code loading(DexClassLoader) found.
+[Info] <Framework> Framework - MonoDroid:
+           This app is NOT using MonoDroid Framework (http://xamarin.com/android).
+[Info] <Hacker> Base64 String Encryption:
+           No encoded Base64 String or Urls found.
+[Info] <Database><Hacker> Key for Android SQLite Databases Encryption:
+           Did not find using the symmetric key(PRAGMA key) to encrypt the SQLite databases (It's still possible that it might use but we
+           did not find out).
+[Info] <Debug><Hacker> Codes for Checking Android Debug Mode:
+           Did not detect codes for checking "ApplicationInfo.FLAG_DEBUGGABLE" in AndroidManifest.xml.
+[Info] <Hacker> APK Installing Source Checking:
+           Did not detect this app checks for APK installer sources.
+[Info] <KeyStore><Hacker> KeyStore File Location:
+           Did not find any possible BKS keystores or certificate keystore file (Notice: It does not mean this app does not use keysotre):
+[Info] <KeyStore><Hacker> KeyStore Protection Checking:
+           Ignore checking KeyStore protected by password or not because you're not using KeyStore.
+[Info] <Hacker> Code Setting Preventing Screenshot Capturing:
+           Did not detect this app has code setting preventing screenshot capturing.
+[Info] <Signature><Hacker> Getting Signature Code Checking:
+           Did not detect this app is checking the signature in the code.
+[Info]  HttpURLConnection Android Bug Checking:
+           Ignore checking "http.keepAlive" because you're not using "HttpURLConnection".
+[Info] <KeyStore> KeyStore Type Checking:
+           KeyStore 'BKS' type check OK
+[Info] <#CVE-2013-4787#> Master Key Type I Vulnerability:
+           No Master Key Type I Vulnerability in this APK.
+[Info]  App Sandbox Permission Checking:
+           No security issues "MODE_WORLD_READABLE" or "MODE_WORLD_WRITEABLE" found on 'openOrCreateDatabase' or 'openOrCreateDatabase2' or
+           'getDir' or 'getSharedPreferences' or 'openFileOutput'
+[Info]  AndroidManifest Dangerous ProtectionLevel of Permission Checking:
+           No "dangerous" protection level customized permission found (AndroidManifest.xml).
+[Info]  AndroidManifest PermissionGroup Checking:
+           PermissionGroup in permission tag of AndroidManifest sets correctly.
+[Info] <Implicit_Intent> Implicit Service Checking:
+           No dangerous implicit service.
+[Info]  AndroidManifest "intent-filter" Settings Checking:
+           "intent-filter" of AndroidManifest.xml check OK.
+[Info]  AndroidManifest Normal ProtectionLevel of Permission Checking:
+           No default or "normal" protection level customized permission found (AndroidManifest.xml).
+[Info] <#CVE-2013-6272#> AndroidManifest Exported Lost Prefix Checking:
+           No exported components that forgot to add "android:" prefix.
+[Info]  AndroidManifest ContentProvider Exported Checking:
+           No exported "ContentProvider" found (AndroidManifest.xml).
+[Info] <Sensitive_Information> Getting IMEI and Device ID:
+           Did not detect this app is getting the "device id(IMEI)" by "TelephonyManager.getDeviceId()" approach.
+[Info] <Sensitive_Information> Getting ANDROID_ID:
+           Did not detect this app is getting the 64-bit number "Settings.Secure.ANDROID_ID".
+[Info]  Codes for Sending SMS:
+           Did not detect this app has code for sending SMS messages (sendDataMessage, sendMultipartTextMessage or sendTextMessage).
+[Info] <System> AndroidManifest sharedUserId Checking:
+           This app does not use "android.uid.system" sharedUserId.
+[Info] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Custom Classes):
+           Self-defined HOSTNAME VERIFIER checking OK.
+[Info] <SSL_Security> SSL Implementation Checking (Verifying Host Name in Fields):
+           Critical vulnerability "ALLOW_ALL_HOSTNAME_VERIFIER" field setting or "AllowAllHostnameVerifier" class instance not found.
+[Info] <SSL_Security> SSL Implementation Checking (Insecure component):
+           Did not detect SSLSocketFactory by insecure method "getInsecure".
+[Info] <SSL_Security> SSL Implementation Checking (HttpHost):
+           DEFAULT_SCHEME_NAME for HttpHost check: OK
+[Info] <SSL_Security> SSL Implementation Checking (WebViewClient for WebView):
+           Did not detect critical usage of "WebViewClient"(MITM Vulnerability).
+[Info] <SSL_Security> SSL Certificate Verification Checking:
+           Did not find vulnerable X509Certificate code.
+[Info]  Unnecessary Permission Checking:
+           Permission 'android.permission.ACCESS_MOCK_LOCATION' sets correctly.
+[Info]  Accessing the Internet Checking:
+           This app is using the Internet via HTTP protocol.
+[Info]  AndroidManifest System Use Permission Checking:
+           No system-level critical use-permission found.
+[Info] <WebView> WebView Local File Access Attacks Checking:
+           Did not find potentially critical local file access settings.
+[Info] <WebView> WebView Potential XSS Attacks Checking:
+           Did not detect "setJavaScriptEnabled(true)" in WebView.
+[Info] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking:
+           WebView addJavascriptInterface vulnerabilities not found.
+------------------------------------------------------------
+AndroBugs analyzing time: 3.166042 secs
+Total elapsed time: 11.097982 secs
