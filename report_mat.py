@@ -60,6 +60,7 @@ class text:
 	
 	def give_txt(self):
 		self.txt.seek(0)
+		self.lines = []
 		for self.line in self.txt:
 			#print("reading line -> ")
 			#print(self.line)
@@ -82,6 +83,8 @@ class picker:
 	ct_l = []
 	wn_l = []
 	def pick_lines(self, txt):
+		self.ct_l = []
+		self.wn_l = []
 		for line in txt:
 			if self.ct in line:
 				self.ct_l.append(line)
@@ -90,9 +93,6 @@ class picker:
 		return self.ct_l, self.wn_l
 			
 	def split_cat(self, data):
-		#re.split(r"<\>
-		# re.split("\[|\] | <|<|>|> |:", c) <-------- working best till now 
-		# check '<' before hand
 		# case 1: [Critical]  Accessing the Internet Checking: ---> ['', 'Critical', ' AndroidManifest ContentProvider Exported Checking', '']
 		# case 2: [Critical] <Implicit_Intent> Implicit Service Checking: ---> ['', 'Critical', '', 'Implicit_Intent', ' Implicit Service Checking', '']
 		# case 3: [Critical] <WebView><Remote Code Execution><#CVE-2013-4710#> WebView RCE Vulnerability Checking: ---> ['', 'Critical', '', 'WebView', '', 'Remote Code Execution', '', '#CVE-2013-4710#', ' WebView RCE Vulnerability Checking', '']
@@ -110,8 +110,8 @@ def rename(name):
 		
 def main():
 	excel = sheet()						# creating sheet
-	i = 0								# col
-	j = 0								# row
+	count = 0
+	cnt = []
 	app_no = 0
 	vul_no = 0
 	temp = ''
@@ -136,11 +136,9 @@ def main():
 			print("Filed to open!")
 			exit()
 		critical = []							# clearing critical old report info
-		print("Critical empty: ")
-		#print(critical)
 		txt_data = f.give_txt()					# getting report text
+		ct_l = []
 		ct_l, wn_l = pick.pick_lines(txt_data)	# getting critical and warning of each report
-		print(ct_l)
 		for data in ct_l:
 			tag, des = pick.split_cat(data)
 			if des is None:
@@ -153,16 +151,22 @@ def main():
 				critical_all.append(temp)
 				vul_no = critical_all.index(temp) + 1
 				excel.add_into(vul_no, 0, temp)
-			excel.add_into((critical_all.index(temp) + 1), app_no, 1)
-		print(critical)
-				
-#		for vuln in critical_all:
-#			vul_no = critical_all.index(vuln) + 1
-#			if vuln in critical:
-#				excel.add_into(vul_no, app_no, 1)
-#			else:
-#				print("nooo")
-#				excel.add_into(vul_no, app_no, 0)
+		cnt.append(len(critical_all))
+		# marking 0 1 in app report
+		for vuln in critical_all:
+			vul_no = critical_all.index(vuln) + 1
+			if vuln in critical:
+				excel.add_into(vul_no, app_no, 1)
+			else:
+				excel.add_into(vul_no, app_no, 0)
+	# filling rest with zeros
+	for n in cnt:
+		count += 1
+		while n < len(critical_all):
+			n += 1
+			excel.add_into(n, count, 0)
+			
+	print("=" * 70)
 	print("Total Critical cases: " + str(len(critical_all)))
 	for item in critical_all:
 		print(item)
