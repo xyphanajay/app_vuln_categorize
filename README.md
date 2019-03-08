@@ -6,3 +6,10 @@ Scan play store applications for potential security vulnerabilities using AndroB
 2. Copy the script - "report_mat.py", outside the report folder.
 3. Start script - "python report_mat.py" //python3 is required
 4. An excel sheet will be generated after complete analysis of all reports outside the report folder.
+
+## Way around - steps
+1. $ git clone git@github.com:xyphanajay/vuln_app_categ.git
+2. copy all the reports that you want to analyse in ./vuln_app_categ/report
+3. $ cd vuln_app_categ
+4. $ python report_mat.py
+5. Check excel sheet named "Final_report_(time)" in ./vuln_app_categ
